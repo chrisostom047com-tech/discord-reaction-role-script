@@ -1,0 +1,14 @@
+{
+  "name": "discord-reaction-role-script",
+  "version": "1.0.0",
+  "description": "One-shot CLI script to add or remove a Discord role from users who reacted to a message or voted on a poll.",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5"
+  }
+}
