@@ -62,3 +62,22 @@ The script will log in, fetch the guild/role/channel/message, collect the unique
 ## Project structure
 
 index.js is the main script, package.json holds dependencies, .env.example is the config template, README.md is this file.
+
+## Design notes
+
+A few implementation choices worth explaining:
+
+- The script uses a one-shot discord.js Client rather than a persistent
+  bot process, per the bounty requirement. It logs in, does the work, and
+  calls client.destroy() before exiting, so nothing lingers in memory.
+- ADD and REMOVE both check the user's current role state first, so re-running
+  the script is always safe (idempotent) and never throws on users who
+  already have or already lack the role.
+- Poll support treats "no POLL_ANSWER_ID" as "count every answer's voters",
+  since most real use cases care about anyone who voted, not one specific
+  answer. Restricting to a single answer is opt-in.
+- Bots are excluded from the reaction/vote count by default, since giving
+  a role to a bot account is rarely the intent.
+- Rate limiting is handled with a fixed small delay rather than a retry loop,
+  since the expected batch size for this kind of role sync is small enough
+  that a simple delay is more predictable than exponential backoff.
